@@ -1,0 +1,24 @@
+.greeting-bar {
+  display: inline-block;
+  padding: 10px 25px;
+  border-radius: 50px;
+  background-color: transparent;
+  border: 1px solid #a7a8ae;
+  color: rgb(235, 230, 230);
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 40px;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease-out;
+   
+}
+
+.greeting-bar:hover {
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(255, 255, 255, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.1);
+}
