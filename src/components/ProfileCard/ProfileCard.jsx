@@ -1,355 +1,456 @@
-import React, { useEffect, useRef, useCallback, useMemo } from "react";
-import "./ProfileCard.css";
-import Avatar from "../../assets/images/Avatar.png"
+:root {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+  --pointer-from-center: 0;
+  --pointer-from-top: 0.5;
+  --pointer-from-left: 0.5;
+  --card-opacity: 0;
+  --rotate-x: 0deg;
+  --rotate-y: 0deg;
+  --background-x: 50%;
+  --background-y: 50%;
+  --grain: none;
+  --icon: none;
+  --behind-gradient: none;
+  --inner-gradient: none;
+  --sunpillar-1: hsl(2, 100%, 73%);
+  --sunpillar-2: hsl(53, 100%, 69%);
+  --sunpillar-3: hsl(93, 100%, 69%);
+  --sunpillar-4: hsl(176, 100%, 76%);
+  --sunpillar-5: hsl(228, 100%, 74%);
+  --sunpillar-6: hsl(283, 100%, 73%);
+  --sunpillar-clr-1: var(--sunpillar-1);
+  --sunpillar-clr-2: var(--sunpillar-2);
+  --sunpillar-clr-3: var(--sunpillar-3);
+  --sunpillar-clr-4: var(--sunpillar-4);
+  --sunpillar-clr-5: var(--sunpillar-5);
+  --sunpillar-clr-6: var(--sunpillar-6);
+  --card-radius: 30px;
+}
 
-const DEFAULT_BEHIND_GRADIENT =
-  "radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(247, 244, 244, 0.5) 10%, rgba(255, 253, 255, 0.5) 50%, rgba(226, 225, 225, 0) 100%)";
+.pc-card-wrapper {
+  perspective: 500px;
+  transform: translate3d(0, 0, 0.1px);
+  position: relative;
+  touch-action: none;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+}
 
-const DEFAULT_INNER_GRADIENT =
-  "linear-gradient(145deg, #252525ff 0%, #333333 100%)";
+.pc-card-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: inherit;
+  background-position: inherit;
+  border-radius: inherit;
+  transition: all 0.5s ease;
+  filter: contrast(1) saturate(1) blur(10px);
+  transform: scale(0.8) translate3d(0, 0, 0.1px);
+  background-size: 100% 100%;
+  background-image: var(--behind-gradient);
+}
 
-const ANIMATION_CONFIG = {
-  SMOOTH_DURATION: 600,
-  INITIAL_DURATION: 1500,
-  INITIAL_X_OFFSET: 70,
-  INITIAL_Y_OFFSET: 60,
-  DEVICE_BETA_OFFSET: 20,
-};
+.pc-card-wrapper:hover,
+.pc-card-wrapper.active {
+  --card-opacity: 1;
+}
 
-const clamp = (value, min = 0, max = 100) =>
-  Math.min(Math.max(value, min), max);
+.pc-card-wrapper:hover::before,
+.pc-card-wrapper.active::before {
+  filter: contrast(1) saturate(2) blur(40px) opacity(1);
+  transform: scale(0.9) translate3d(0, 0, 0.1px);
+}
 
-const round = (value, precision = 3) =>
-  parseFloat(value.toFixed(precision));
+.pc-card {
+  height: clamp(350px, 60vh, 540px);
+  width: 100%;
+  display: grid;
+  aspect-ratio: 0.718;
+  border-radius: var(--card-radius);
+  position: relative;
+  background-blend-mode: color-dodge, normal, normal, normal;
+  animation: glow-bg 12s linear infinite;
+  box-shadow: rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px) calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px;
+  transition: transform 1s ease;
+  transform: translate3d(0, 0, 0.1px) rotateX(0deg) rotateY(0deg);
+  background-size: 100% 100%;
+  background-position: 0 0, 0 0, 50% 50%, 0 0;
+  background-image: radial-gradient(circle, rgba(200, 200, 200, 0.25) 10%, rgba(238, 231, 231, 0.1) 40%, transparent 100%);
+  overflow: hidden;
+}
 
-const adjust = (
-  value,
-  fromMin,
-  fromMax,
-  toMin,
-  toMax
-) =>
-  round(toMin + ((toMax - toMin) * (value - fromMin)) / (fromMax - fromMin));
+.pc-card:hover,
+.pc-card.active {
+  transition: none;
+  transform: translate3d(0, 0, 0.1px) rotateX(var(--rotate-y)) rotateY(var(--rotate-x));
+}
 
-const easeInOutCubic = (x) =>
-  x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+.pc-card * {
+  display: grid;
+  grid-area: 1/-1;
+  border-radius: var(--card-radius);
+  transform: translate3d(0, 0, 0.1px);
+  pointer-events: none;
+}
 
-const ProfileCardComponent = ({
-  avatarUrl = Avatar,
-  iconUrl = "https://avatars.githubusercontent.com/u/123456789?v=4",
-  grainUrl = "<Placeholder for grain URL>",
-  behindGradient,
-  innerGradient,
-  showBehindGradient = true,
-  className = "",
-  enableTilt = true,
-  enableMobileTilt = false,
-  mobileTiltSensitivity = 3,
-  miniAvatarUrl,
-  name = "Aw Qi Heng",
-  title = "Information Engineering and Media",
-  handle = "qi_hengg",
-  status = "Online",
-  contactText = "Cool Right?",
-  showUserInfo = true,
-  onContactClick,
-}) => {
-  const wrapRef = useRef(null);
-  const cardRef = useRef(null);
+.pc-inside {
+  inset: 1px;
+  position: absolute;
+  background-image: var(--inner-gradient);
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: translate3d(0, 0, 0.01px);
+}
 
-  const animationHandlers = useMemo(() => {
-    if (!enableTilt) return null;
+.pc-shine {
+  mask-image: var(--icon);
+  mask-mode: luminance;
+  mask-repeat: repeat;
+  mask-size: 150%;
+  mask-position: top calc(200% - (var(--background-y) * 5)) left calc(100% - var(--background-x));
+  transition: filter 0.6s ease;
+  filter: brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5);
+  animation: holo-bg 18s linear infinite;
+  mix-blend-mode: color-dodge;
+  display: none;
+}
 
-    let rafId = null;
+.pc-shine,
+.pc-shine::after {
+  --space: 5%;
+  --angle: -45deg;
+  transform: translate3d(0, 0, 1px);
+  overflow: hidden;
+  z-index: 3;
+  background: transparent;
+  background-size: cover;
+  background-position: center;
+  background-image: repeating-linear-gradient(0deg, var(--sunpillar-clr-1) calc(var(--space) * 1), var(--sunpillar-clr-2) calc(var(--space) * 2), var(--sunpillar-clr-3) calc(var(--space) * 3), var(--sunpillar-clr-4) calc(var(--space) * 4), var(--sunpillar-clr-5) calc(var(--space) * 5), var(--sunpillar-clr-6) calc(var(--space) * 6), var(--sunpillar-clr-1) calc(var(--space) * 7)), repeating-linear-gradient(var(--angle), #0e152e 0%, hsl(180, 10%, 60%) 3.8%, hsl(180, 29%, 66%) 4.5%, hsl(180, 10%, 60%) 5.2%, #0e152e 10%, #0e152e 12%), radial-gradient(farthest-corner circle at var(--pointer-x) var(--pointer-y), hsla(0, 0%, 0%, 0.1) 12%, hsla(0, 0%, 0%, 0.15) 20%, hsla(0, 0%, 0%, 0.25) 120%);
+  background-position: 0 var(--background-y), var(--background-x) var(--background-y), center;
+  background-blend-mode: color, hard-light;
+  background-size: 500% 500%, 300% 300%, 200% 200%;
+  background-repeat: repeat;
+}
 
-    const updateCardTransform = (
-      offsetX,
-      offsetY,
-      card,
-      wrap
-    ) => {
-      const width = card.clientWidth;
-      const height = card.clientHeight;
+.pc-shine::before,
+.pc-shine::after {
+  content: '';
+  background-position: center;
+  background-size: cover;
+  grid-area: 1/1;
+  opacity: 0;
+}
 
-      const percentX = clamp((100 / width) * offsetX);
-      const percentY = clamp((100 / height) * offsetY);
+.pc-card:hover .pc-shine,
+.pc-card.active .pc-shine {
+  filter: brightness(0.85) contrast(1.5) saturate(0.5);
+  animation: none;
+}
 
-      const centerX = percentX - 50;
-      const centerY = percentY - 50;
+.pc-card:hover .pc-shine::before,
+.pc-card.active .pc-shine::before,
+.pc-card:hover .pc-shine::after,
+.pc-card.active .pc-shine::after {
+  opacity: 1;
+}
 
-      const properties = {
-        "--pointer-x": `${percentX}%`,
-        "--pointer-y": `${percentY}%`,
-        "--background-x": `${adjust(percentX, 0, 100, 35, 65)}%`,
-        "--background-y": `${adjust(percentY, 0, 100, 35, 65)}%`,
-        "--pointer-from-center": `${clamp(Math.hypot(percentY - 50, percentX - 50) / 50, 0, 1)}`,
-        "--pointer-from-top": `${percentY / 100}`,
-        "--pointer-from-left": `${percentX / 100}`,
-        "--rotate-x": `${round(-(centerX / 5))}deg`,
-        "--rotate-y": `${round(centerY / 4)}deg`,
-      };
+.pc-shine::before {
+  background-image: linear-gradient(45deg, var(--sunpillar-4), var(--sunpillar-5), var(--sunpillar-6), var(--sunpillar-1), var(--sunpillar-2), var(--sunpillar-3)), radial-gradient(circle at var(--pointer-x) var(--pointer-y), hsl(0, 0%, 70%) 0%, hsla(0, 0%, 30%, 0.2) 90%), var(--grain);
+  background-size: 250% 250%, 100% 100%, 220px 220px;
+  background-position: var(--pointer-x) var(--pointer-y), center, calc(var(--pointer-x) * 0.01) calc(var(--pointer-y) * 0.01);
+  background-blend-mode: color-dodge;
+  filter: brightness(calc(2 - var(--pointer-from-center))) contrast(calc(var(--pointer-from-center) + 2)) saturate(calc(0.5 + var(--pointer-from-center)));
+  mix-blend-mode: luminosity;
+}
 
-      Object.entries(properties).forEach(([property, value]) => {
-        wrap.style.setProperty(property, value);
-      });
-    };
+.pc-shine::after {
+  background-position: 0 var(--background-y), calc(var(--background-x) * 0.4) calc(var(--background-y) * 0.5), center;
+  background-size: 200% 300%, 700% 700%, 100% 100%;
+  mix-blend-mode: difference;
+  filter: brightness(0.8) contrast(1.5);
+}
 
-    const createSmoothAnimation = (
-      duration,
-      startX,
-      startY,
-      card,
-      wrap
-    ) => {
-      const startTime = performance.now();
-      const targetX = wrap.clientWidth / 2;
-      const targetY = wrap.clientHeight / 2;
+.pc-glare {
+  transform: translate3d(0, 0, 1.1px);
+  overflow: hidden;
+  background-image: radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.1) 90%);
+  mix-blend-mode: overlay;
+  filter: brightness(1) contrast(1);
+  z-index: 4;
+}
 
-      const animationLoop = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = clamp(elapsed / duration);
-        const easedProgress = easeInOutCubic(progress);
+.pc-avatar-content {
+  mix-blend-mode: screen;
+  overflow: hidden;
+}
 
-        const currentX = adjust(easedProgress, 0, 1, startX, targetX);
-        const currentY = adjust(easedProgress, 0, 1, startY, targetY);
+.pc-avatar-content .avatar {
+  width: 100%;
+  position: absolute;
+  left: 45%;
+  transform: translateX(-50%) scale(1);
+  bottom: 2px;
+  opacity: calc(1.75 - var(--pointer-from-center));
+}
 
-        updateCardTransform(currentX, currentY, card, wrap);
+.pc-avatar-content::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  backdrop-filter: blur(30px);
+  mask: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(0, 0, 0, 0) 60%,
+      rgba(0, 0, 0, 1) 90%,
+      rgba(0, 0, 0, 1) 100%);
+  pointer-events: none;
+}
 
-        if (progress < 1) {
-          rafId = requestAnimationFrame(animationLoop);
-        }
-      };
+.pc-user-info {
+  position: absolute;
+  bottom: clamp(12px, 3vw, 20px);
+  left: clamp(12px, 3vw, 20px);
+  right: clamp(12px, 3vw, 20px);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: clamp(8px, 2vw, 14px);
+  pointer-events: auto;
+  gap: 10px;
+}
 
-      rafId = requestAnimationFrame(animationLoop);
-    };
+.pc-user-details {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 12px);
+  flex: 1;
+  min-width: 0;
+}
 
-    return {
-      updateCardTransform,
-      createSmoothAnimation,
-      cancelAnimation: () => {
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      },
-    };
-  }, [enableTilt]);
+.pc-mini-avatar {
+  width: clamp(32px, 6vw, 48px);
+  height: clamp(32px, 6vw, 48px);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
 
-  const handlePointerMove = useCallback(
-    (event) => {
-      const card = cardRef.current;
-      const wrap = wrapRef.current;
+.pc-mini-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  transform: translateY(-10px);
+}
 
-      if (!card || !wrap || !animationHandlers) return;
+.pc-user-text {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
 
-      const rect = card.getBoundingClientRect();
-      animationHandlers.updateCardTransform(
-        event.clientX - rect.left,
-        event.clientY - rect.top,
-        card,
-        wrap
-      );
-    },
-    [animationHandlers]
-  );
+.pc-handle {
+  font-size: clamp(11px, 2.5vw, 14px);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-  const handlePointerEnter = useCallback(() => {
-    const card = cardRef.current;
-    const wrap = wrapRef.current;
+.pc-status {
+  font-size: clamp(9px, 2.2vw, 12px);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-    if (!card || !wrap || !animationHandlers) return;
+.pc-contact-btn {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: clamp(6px, 1.5vw, 8px) clamp(10px, 2.5vw, 16px);
+  font-size: clamp(10px, 2.2vw, 14px);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-    animationHandlers.cancelAnimation();
-    wrap.classList.add("active");
-    card.classList.add("active");
-  }, [animationHandlers]);
+.pc-contact-btn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
 
-  const handlePointerLeave = useCallback(
-    (event) => {
-      const card = cardRef.current;
-      const wrap = wrapRef.current;
+.pc-content {
+  max-height: 100%;
+  overflow: hidden;
+  text-align: center;
+  position: relative;
+  transform: translate3d(calc(var(--pointer-from-left) * -6px + 3px), calc(var(--pointer-from-top) * -6px + 3px), 0.1px) !important;
+  z-index: 5;
+  mix-blend-mode: luminosity;
+}
 
-      if (!card || !wrap || !animationHandlers) return;
+.pc-details {
+  width: 100%;
+  position: absolute;
+  top: clamp(1.5em, 4vw, 3em);
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+  box-sizing: border-box;
+}
 
-      animationHandlers.createSmoothAnimation(
-        ANIMATION_CONFIG.SMOOTH_DURATION,
-        event.offsetX,
-        event.offsetY,
-        card,
-        wrap
-      );
-      wrap.classList.remove("active");
-      card.classList.remove("active");
-    },
-    [animationHandlers]
-  );
+.pc-details h3 {
+  font-weight: 600;
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  margin: 0;
+  background-image: none;
+  background-size: 1em 1.5em;
+  -webkit-text-fill-color: #a8a2a2;
+  background-clip: text;
+  -webkit-background-clip: text;
+  line-height: 1.2;
+}
 
-  const handleDeviceOrientation = useCallback(
-    (event) => {
-      const card = cardRef.current;
-      const wrap = wrapRef.current;
+.pc-details p {
+  font-weight: 600;
+  position: relative;
+  top: 0px;
+  white-space: nowrap;
+  font-size: clamp(12px, 2.5vw, 16px);
+  margin: 0 auto;
+  width: min-content;
+  background-image: linear-gradient(to bottom, #fff, #4a4ac0);
+  background-size: 1em 1.5em;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  line-height: 1.3;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-      if (!card || !wrap || !animationHandlers) return;
+@keyframes glow-bg {
+  0% {
+    --bgrotate: 0deg;
+  }
 
-      const { beta, gamma } = event;
-      if (!beta || !gamma) return;
+  100% {
+    --bgrotate: 360deg;
+  }
+}
 
-      animationHandlers.updateCardTransform(
-        card.clientHeight / 2 + gamma * mobileTiltSensitivity,
-        card.clientWidth / 2 + (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
-        card,
-        wrap
-      );
-    },
-    [animationHandlers, mobileTiltSensitivity]
-  );
+@keyframes holo-bg {
+  0% {
+    background-position: 0 var(--background-y), 0 0, center;
+  }
 
-  useEffect(() => {
-    if (!enableTilt || !animationHandlers) return;
+  100% {
+    background-position: 0 var(--background-y), 90% 90%, center;
+  }
+}
 
-    const card = cardRef.current;
-    const wrap = wrapRef.current;
+/* Mobile Specific Styles */
+@media (max-width: 768px) {
+  .pc-card-wrapper {
+    max-width: 300px;
+  }
+  
+  .pc-card {
+    height: clamp(300px, 50vh, 400px);
+  }
 
-    if (!card || !wrap) return;
+  .pc-user-info {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
 
-    const pointerMoveHandler = handlePointerMove;
-    const pointerEnterHandler = handlePointerEnter;
-    const pointerLeaveHandler = handlePointerLeave;
-    const deviceOrientationHandler = handleDeviceOrientation;
+  .pc-user-details {
+    flex-direction: row;
+    align-items: center;
+  }
 
-    const handleClick = () => {
-      if (!enableMobileTilt || location.protocol !== 'https:') return;
-      if (typeof window.DeviceMotionEvent.requestPermission === 'function') {
-        window.DeviceMotionEvent
-          .requestPermission()
-          .then(state => {
-            if (state === 'granted') {
-              window.addEventListener('deviceorientation', deviceOrientationHandler);
-            }
-          })
-          .catch(err => console.error(err));
-      } else {
-        window.addEventListener('deviceorientation', deviceOrientationHandler);
-      }
-    };
+  .pc-user-text {
+    gap: 1px;
+  }
 
-    card.addEventListener("pointerenter", pointerEnterHandler);
-    card.addEventListener("pointermove", pointerMoveHandler);
-    card.addEventListener("pointerleave", pointerLeaveHandler);
-    card.addEventListener("click", handleClick);
+  .pc-details {
+    top: clamp(1em, 3vw, 2em);
+  }
 
-    const initialX = wrap.clientWidth - ANIMATION_CONFIG.INITIAL_X_OFFSET;
-    const initialY = ANIMATION_CONFIG.INITIAL_Y_OFFSET;
+  .pc-details p {
+    white-space: normal;
+    width: auto;
+    text-align: center;
+  }
+}
 
-    animationHandlers.updateCardTransform(initialX, initialY, card, wrap);
-    animationHandlers.createSmoothAnimation(
-      ANIMATION_CONFIG.INITIAL_DURATION,
-      initialX,
-      initialY,
-      card,
-      wrap
-    );
+@media (max-width: 480px) {
+  .pc-card-wrapper {
+    max-width: 280px;
+  }
+  
+  .pc-card {
+    height: clamp(280px, 45vh, 350px);
+  }
 
-    return () => {
-      card.removeEventListener("pointerenter", pointerEnterHandler);
-      card.removeEventListener("pointermove", pointerMoveHandler);
-      card.removeEventListener("pointerleave", pointerLeaveHandler);
-      card.removeEventListener("click", handleClick);
-      window.removeEventListener('deviceorientation', deviceOrientationHandler);
-      animationHandlers.cancelAnimation();
-    };
-  }, [
-    enableTilt,
-    enableMobileTilt,
-    animationHandlers,
-    handlePointerMove,
-    handlePointerEnter,
-    handlePointerLeave,
-    handleDeviceOrientation,
-  ]);
+  .pc-user-info {
+    border-radius: 12px;
+    padding: 8px 10px;
+  }
 
-  const cardStyle = useMemo(
-    () =>
-    ({
-      "--icon": iconUrl ? `url(${iconUrl})` : "none",
-      "--grain": grainUrl ? `url(${grainUrl})` : "none",
-      "--behind-gradient": showBehindGradient
-        ? (behindGradient ?? DEFAULT_BEHIND_GRADIENT)
-        : "none",
-      "--inner-gradient": innerGradient ?? DEFAULT_INNER_GRADIENT,
-    }),
-    [iconUrl, grainUrl, showBehindGradient, behindGradient, innerGradient]
-  );
+  .pc-contact-btn {
+    border-radius: 6px;
+  }
 
-  const handleContactClick = useCallback(() => {
-    onContactClick?.();
-  }, [onContactClick]);
+  .pc-details {
+    padding: 0 10px;
+  }
+}
 
-  return (
-    <div
-      ref={wrapRef}
-      className={`pc-card-wrapper ${className}`.trim()}
-      style={cardStyle}
-    >
-      <section ref={cardRef} className="pc-card">
-        <div className="pc-inside">
-          <div className="pc-shine" />
-          <div className="pc-glare" />
-          <div className="pc-content pc-avatar-content">
-            <img
-              className="avatar"
-              src={avatarUrl}
-              alt={`${name || "User"} avatar`}
-              loading="lazy"
-              onError={(e) => {
-                const target = e.target;
-                target.style.display = "none";
-              }}
-            />
-            {showUserInfo && (
-              <div className="pc-user-info">
-                <div className="pc-user-details">
-                  <div className="pc-mini-avatar">
-                    <img
-                      src={miniAvatarUrl || avatarUrl}
-                      alt={`${name || "User"} mini avatar`}
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.target;
-                        target.style.opacity = "0.5";
-                        target.src = avatarUrl;
-                      }}
-                    />
-                  </div>
-                  <div className="pc-user-text">
-                    <div className="pc-handle">@{handle}</div>
-                    <div className="pc-status">{status}</div>
-                  </div>
-                </div>
-                <button
-                  className="pc-contact-btn"
-                  onClick={handleContactClick}
-                  style={{ pointerEvents: "auto" }}
-                  type="button"
-                  aria-label={`Contact ${name || "user"}`}
-                >
-                  {contactText}
-                </button>
-              </div>
-            )}
-          </div>
-          <div className="pc-content">
-            <div className="pc-details">
-              <h3>{name}</h3>
-              <p>{title}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-};
+@media (max-width: 320px) {
+  .pc-card-wrapper {
+    max-width: 250px;
+  }
+  
+  .pc-card {
+    height: clamp(250px, 40vh, 300px);
+  }
 
-const ProfileCard = React.memo(ProfileCardComponent);
+  .pc-user-info {
+    padding: 6px 8px;
+    border-radius: 10px;
+  }
 
-export default ProfileCard;
+  .pc-contact-btn {
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .pc-details {
+    padding: 0 8px;
+    top: 1em;
+  }
+}
