@@ -1,18 +1,21 @@
-/* src/components/Navbar/Navbar.css */
+/* Navbar.css - Mobile-First Responsive Design */
+
 .navbar {
   position: relative;
-  width: 30vw;
-  margin: 0 auto; 
+  width: 95%;
+  max-width: 500px;
+  margin: 0 auto;
   background-color: transparent;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 12px 30px;
+  padding: 10px 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
 }
 
 .navbar-links {
@@ -22,23 +25,29 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .navbar-links li {
-  margin: 0 20px;
+  margin: 0;
 }
 
 .navbar-links a {
   color: #ffffff;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   position: relative;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
-
 
 .navbar-links a::after {
   content: '';
@@ -54,4 +63,80 @@
 
 .navbar-links a:hover::after {
   width: 100%;
+}
+
+/* Mobile Styles */
+@media (max-width: 767px) {
+  .navbar {
+    width: 90%;
+    padding: 8px 12px;
+  }
+  
+  .navbar-links {
+    gap: 5px;
+  }
+  
+  .navbar-links a {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    min-width: 70px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .navbar {
+    width: 95%;
+    padding: 6px 10px;
+  }
+  
+  .navbar-links {
+    gap: 3px;
+  }
+  
+  .navbar-links a {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+    min-width: 60px;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .navbar {
+    width: 50%;
+    max-width: 400px;
+    padding: 12px 20px;
+  }
+  
+  .navbar-links {
+    gap: 15px;
+  }
+  
+  .navbar-links a {
+    font-size: 1rem;
+    padding: 8px 16px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+  .navbar {
+    width: 30vw;
+    max-width: 600px;
+    padding: 12px 30px;
+  }
+  
+  .navbar-links {
+    gap: 20px;
+  }
+  
+  .navbar-links li {
+    margin: 0 20px;
+  }
+  
+  .navbar-links a {
+    font-size: 1.1rem;
+    padding: 8px 16px;
+  }
 }
