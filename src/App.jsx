@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import './App.css'
+import './components/Navbar/Navbar.css'
+import './components/GridGallery/GridGallery.css'
+
 import Silk from './components/Silk/Silk.jsx';
 import Navbar from './components/Navbar/Navbar.jsx';
 import SplitText from "./components/Split-Text.jsx";
