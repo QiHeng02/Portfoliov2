@@ -125,9 +125,9 @@ nav.navbar .navbar-links a:hover::after {
 }
 
 /* Desktop Styles - This should fix your desktop issue */
-@media (min-width: 800px) {
+@media (min-width: 700px) {
   nav.navbar {
-    width: 30vw !important;
+    width: 40vw !important;
     max-width: 1024px;
     padding: 12px 30px !important;
   }
