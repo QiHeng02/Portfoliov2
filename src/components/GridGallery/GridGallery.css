@@ -157,7 +157,7 @@
   }
   
   .gallery-item-large {
-    grid-row-end: span 3;
+    grid-row-end: span 4;
     grid-column-end: span 2;
   }
   
