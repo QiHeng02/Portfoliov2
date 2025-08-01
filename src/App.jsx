@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import './App.css'
-
 import Silk from './components/Silk/Silk.jsx';
 import Navbar from './components/Navbar/Navbar.jsx';
 import SplitText from "./components/Split-Text.jsx";
@@ -199,66 +198,95 @@ function App() {
         </div>
       </div>
 
-      {/* About Me Section */}
+      {/* About Me Section - Updated for Mobile */}
       <div id="about" style={{
         position: 'relative',
         zIndex: 1,
         width: '100vw',
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: '20px',
+        boxSizing: 'border-box',
       }}>
-        <div style={{
-        display: 'flex',
-        gap: '40px',
-        padding: '0 10rem',
-        maxWidth: '800px',
-        textAlign: 'left',
-        marginLeft: '-200px',
-        flexDirection: 'column'
-
+        <div className="about-container" style={{
+          display: 'flex',
+          gap: 'clamp(20px, 5vw, 60px)',
+          maxWidth: '1200px',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
         }}>
-          <h1 style={{ color: '#ffffff', fontSize: '5rem'}}>
-          <TextType 
-          text={["About me"]}
-          typingSpeed={75}
-          pauseDuration={100}
-          showCursor={true}
-          cursorCharacter="!"
-          />
-          </h1>
-          <p>
-          <TextType 
-          text={["My hobbies are reading mangas and novels, and stock trading! I also enjoy watching movies and going on a run!"]}
-          typingSpeed={65}
-          pauseDuration={1500}
-          showCursor={false}
-          cursorCharacter="|"
-          />
-          <br />
-          <br />
-          <TextType 
-          text={["Coming from an Information Engineering & Media background, I've had my hands in a ton of different tech. I've coded in Python, C, Java, HTML, CSS and mySQL!. I've even made games in Unity and dabbled in digital design."]}
-          typingSpeed={55}
-          pauseDuration={100}
-          showCursor={false}
-          cursorCharacter="|"
-          />
-          <br />
-          <br />
-          <TextType 
-          text={["Basically, I have a really strong, broad foundation that helps me learn and adapt super quickly."]}
-          typingSpeed={65}
-          pauseDuration={1500}
-          showCursor={false}
-          cursorCharacter="|"
-          />
-            
-          </p>
-        </div>
-        <div> 
-        <ProfileCard/>
+          <div className="about-text" style={{
+            flex: '1 1 400px',
+            minWidth: '300px',
+            maxWidth: '600px',
+            textAlign: 'left',
+            padding: '0 20px',
+          }}>
+            <h1 style={{ 
+              color: '#ffffff', 
+              fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+              marginBottom: '20px',
+              lineHeight: '1.2'
+            }}>
+            <TextType 
+            text={["About me"]}
+            typingSpeed={75}
+            pauseDuration={100}
+            showCursor={true}
+            cursorCharacter="!"
+            />
+            </h1>
+            <div style={{
+              fontSize: 'clamp(0.9rem, 2vw, 1.1rem)',
+              lineHeight: '1.6',
+              color: '#ffffff'
+            }}>
+            <p>
+            <TextType 
+            text={["My hobbies are reading mangas and novels, and stock trading! I also enjoy watching movies and going on a run!"]}
+            typingSpeed={65}
+            pauseDuration={1500}
+            showCursor={false}
+            cursorCharacter="|"
+            />
+            </p>
+            <br />
+            <p>
+            <TextType 
+            text={["Coming from an Information Engineering & Media background, I've had my hands in a ton of different tech. I've coded in Python, C, Java, HTML, CSS and mySQL!. I've even made games in Unity and dabbled in digital design."]}
+            typingSpeed={55}
+            pauseDuration={100}
+            showCursor={false}
+            cursorCharacter="|"
+            />
+            </p>
+            <br />
+            <p>
+            <TextType 
+            text={["Basically, I have a really strong, broad foundation that helps me learn and adapt super quickly."]}
+            typingSpeed={65}
+            pauseDuration={1500}
+            showCursor={false}
+            cursorCharacter="|"
+            />
+            </p>
+            </div>
+          </div>
+          
+          <div className="profile-card-container" style={{
+            flex: '0 0 auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minWidth: '280px',
+            maxWidth: '400px',
+          }}> 
+            <ProfileCard/>
+          </div>
         </div>
       </div>
 
