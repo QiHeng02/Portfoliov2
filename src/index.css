@@ -1,6 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
 :root {
@@ -18,6 +16,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Reset and mobile-first base styles */
+* {
+  box-sizing: border-box;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -33,44 +36,186 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
+/* Mobile-first responsive typography */
 h1 {
- font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-weight: 400; /* Light weight for modern feel */
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
   font-style: normal;
-  letter-spacing: 0.01em; /* Slightly wider for readability */
+  letter-spacing: 0.01em;
   line-height: 1.25;
-  font-size: clamp(2.5rem, 5vw, 5rem);
+  /* Mobile-first: smaller size, grows with screen */
+  font-size: clamp(1.8rem, 4vw, 5rem);
   text-align: center;
+  margin: 10px 0;
 }
 
 p {
- font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-style: normal;
-  letter-spacing: 0.01em; /* Slightly wider for readability */
-  line-height: 1.25;
-  font-size: clamp(0.5rem, 1vw, 3rem);
-  text-align: center;
-}
-
-greeting-bar {
-  display: inline-block; /* Allows the background to wrap tightly around the text */
-  padding: 10px 25px; /* Adjust padding as needed for height and width */
-  border-radius: 50px; /* Makes it pill-shaped */
-  background-color: transparent; /* Transparent background */
-  border: 2px solid #bbbcc3; /* Border color */
-  color: white; /* Text color */
   font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.1em; /* Adjust font size */
-  font-weight: bold; /* Make the text bold */
-  text-transform: uppercase; /* Uppercase text */
+  font-style: normal;
+  letter-spacing: 0.01em;
+  line-height: 1.6; /* Better readability */
+  /* Mobile-first: ensure minimum readable size */
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: subtle shadow */
-  margin-bottom: 20px; /* Space between this bar and the content below */
-  letter-spacing: 1px; /* Optional: adjust letter spacing */
+  margin: 10px 0;
 }
 
+/* App container */
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Silk background */
+.silk-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Hero Section - Mobile First */
+.hero-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  margin-top: -60px; /* Adjust for mobile navbar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px 15px;
+  text-align: center;
+}
+
+.hero-title {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  margin: 20px 0;
+  line-height: 1.2;
+}
+
+.hero-title-mobile {
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  padding: 0 10px;
+}
+
+.curved-loops-container {
+  width: 100%;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+/* Gallery Section - Mobile First */
+.gallery-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 15px;
+  box-sizing: border-box;
+}
+
+.gallery-title {
+  color: #ffffff;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.gallery-title-mobile {
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  margin-bottom: 20px;
+}
+
+.gallery-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* About Section - Mobile First */
+.about-section {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px 20px;
+  gap: 30px;
+}
+
+.about-section-mobile {
+  padding: 30px 15px;
+  gap: 25px;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 100%;
+  text-align: center;
+}
+
+.about-content-mobile {
+  text-align: center;
+  padding: 0;
+}
+
+.about-title {
+  color: #ffffff;
+  font-size: clamp(2rem, 5vw, 5rem);
+  margin-bottom: 20px;
+}
+
+.about-title-mobile {
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+}
+
+.about-text {
+  color: #ffffff;
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+}
+
+.profile-card-container {
+  display: flex;
+  justify-content: center;
+}
+
+.profile-card-mobile {
+  order: -1; /* Show profile card first on mobile */
+  margin-bottom: 20px;
+}
+
+/* Greeting Bar Styles */
+.greeting-bar {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 50px;
+  background-color: transparent;
+  border: 2px solid #bbbcc3;
+  color: white;
+  font-family: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  font-size: clamp(0.8rem, 2vw, 1.1rem);
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+/* Button Styles */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -81,15 +226,98 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  min-height: 44px; /* Ensure touch-friendly size */
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Tablet Styles */
+@media (min-width: 768px) {
+  .hero-section {
+    padding: 40px 30px;
+    margin-top: -80px;
+  }
+  
+  .gallery-section {
+    padding: 50px 30px;
+  }
+  
+  .about-section {
+    flex-direction: row;
+    padding: 50px 40px;
+    gap: 40px;
+  }
+  
+  .about-content {
+    text-align: left;
+    padding: 0 2rem;
+  }
+  
+  .profile-card-mobile {
+    order: initial;
+    margin-bottom: 0;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 1024px) {
+  .hero-section {
+    padding: 60px 40px;
+    margin-top: -80px;
+  }
+  
+  .gallery-section {
+    padding: 60px 40px;
+  }
+  
+  .about-section {
+    padding: 60px;
+    gap: 60px;
+  }
+  
+  .about-content {
+    padding: 0 4rem;
+    margin-left: -200px;
+  }
+}
+
+/* Large Desktop */
+@media (min-width: 1440px) {
+  .hero-section {
+    padding: 80px 60px;
+  }
+  
+  .gallery-section {
+    padding: 80px 60px;
+  }
+  
+  .about-section {
+    padding: 80px;
+    gap: 80px;
+  }
+}
+
+/* Ensure text is readable on mobile */
+@media (max-width: 767px) {
+  body {
+    font-size: 16px; /* Minimum font size for mobile */
+  }
+  
+  /* Increase touch target sizes */
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Light mode support */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

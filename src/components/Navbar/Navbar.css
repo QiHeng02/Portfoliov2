@@ -1,46 +1,60 @@
-/* src/components/Navbar/Navbar.css */
-.navbar {
-  position: relative;
-  width: 30vw;
-  margin: 0 auto; 
+/* Navbar.css - Fixed with higher specificity */
+
+/* Use more specific selectors to override any conflicting styles */
+nav.navbar {
+  position: relative !important;
+  width: 95%;
+  max-width: 500px;
+  margin: 0 auto;
   background-color: transparent;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 20px;
-  padding: 12px 30px;
-  display: flex;
+  padding: 10px 15px;
+  display: flex !important;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s ease;
+  box-sizing: border-box;
 }
 
-.navbar-links {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
+nav.navbar .navbar-links {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.navbar-links li {
-  margin: 0 20px;
+nav.navbar .navbar-links li {
+  margin: 0 !important;
+  padding: 0;
 }
 
-.navbar-links a {
-  color: #ffffff;
+nav.navbar .navbar-links a {
+  color: #ffffff !important;
   text-decoration: none;
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   position: relative;
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
+  min-height: 44px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
-
-.navbar-links a::after {
+nav.navbar .navbar-links a::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -52,6 +66,82 @@
   transform: translateX(-50%);
 }
 
-.navbar-links a:hover::after {
+nav.navbar .navbar-links a:hover::after {
   width: 100%;
+}
+
+/* Mobile Styles with higher specificity */
+@media (max-width: 767px) {
+  nav.navbar {
+    width: 90% !important;
+    padding: 8px 12px !important;
+  }
+  
+  nav.navbar .navbar-links {
+    gap: 5px !important;
+  }
+  
+  nav.navbar .navbar-links a {
+    font-size: 0.8rem !important;
+    padding: 6px 10px !important;
+    min-width: 70px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  nav.navbar {
+    width: 95% !important;
+    padding: 6px 10px !important;
+  }
+  
+  nav.navbar .navbar-links {
+    gap: 3px !important;
+  }
+  
+  nav.navbar .navbar-links a {
+    font-size: 0.75rem !important;
+    padding: 5px 8px !important;
+    min-width: 60px;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  nav.navbar {
+    width: 50% !important;
+    max-width: 400px;
+    padding: 12px 20px !important;
+  }
+  
+  nav.navbar .navbar-links {
+    gap: 15px !important;
+  }
+  
+  nav.navbar .navbar-links a {
+    font-size: 1rem !important;
+    padding: 8px 16px !important;
+  }
+}
+
+/* Desktop Styles - This should fix your desktop issue */
+@media (min-width: 700px) {
+  nav.navbar {
+    width: 40vw !important;
+    max-width: 1024px;
+    padding: 12px 30px !important;
+  }
+  
+  nav.navbar .navbar-links {
+    gap: 20px !important;
+  }
+  
+  nav.navbar .navbar-links li {
+    margin: 0 20px !important;
+  }
+  
+  nav.navbar .navbar-links a {
+    font-size: 1.1rem !important;
+    padding: 8px 16px !important;
+  }
 }
