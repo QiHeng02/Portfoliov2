@@ -146,9 +146,6 @@ function App() {
         alignItems: 'center',
         flexDirection: 'column'
       }}>
-        <GreetingBar
-          text="Hello, I'm Qi Heng">
-        </GreetingBar>
         <h1 className="hero-title">
         <SplitText
           text="Front-End | Engineering | Design "
@@ -157,14 +154,14 @@ function App() {
 
         <div>
           <CurvedLoop 
-            marqueeText="Python | C | Java | HTML | CSS | mySQL | React | "
+            marqueeText=" Python  |  C  |  Java  |  HTML  |  CSS  |  mySQL  |  React  | "
             speed={1}
             curveAmount={0}
             interactive={false}
           />
           <br />
           <CurvedLoop 
-            marqueeText="Unity  |  Adobe Illustrator  |  Fusion 360 |  "
+            marqueeText=" Unity  |  Adobe Illustrator  |  Fusion 360  |  Framer  | "
             speed={1}
             curveAmount={0}
             interactive={false}
